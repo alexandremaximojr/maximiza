@@ -13,8 +13,13 @@ import CredibilitySection from './components/CredibilitySection';
 import UrgencySection from './components/UrgencySection';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
+import { DesignSystemPage } from './pages/DesignSystemPage';
 
 function App() {
+  if (window.location.pathname === '/design-system') {
+    return <DesignSystemPage />;
+  }
+
   return (
     <div className="min-h-screen">
       <Header />
