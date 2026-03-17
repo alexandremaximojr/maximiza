@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
 import { Section, SectionHeader } from '../design-system';
 
 const metrics = [
-  { number: '300%', description: 'Aumento médio de eficiência operacional', colorClass: 'text-brand-green' },
-  { number: '40h', description: 'Horas economizadas por semana em média', colorClass: 'text-brand-cyan' },
-  { number: '15 dias', description: 'Tempo médio para ver primeiros resultados', colorClass: 'text-brand-primary' },
+  { raw: 300, suffix: '%', description: 'Aumento médio de eficiência operacional', colorClass: 'text-brand-green' },
+  { raw: 40,  suffix: 'h', description: 'Horas economizadas por semana em média',  colorClass: 'text-brand-cyan'  },
+  { raw: 15,  suffix: 'd', description: 'Dias para ver primeiros resultados',        colorClass: 'text-brand-primary' },
 ];
 
 const testimonials = [
@@ -24,33 +25,81 @@ const testimonials = [
   },
 ];
 
+// Componente de contador animado: sobe de 0 até `to` quando entra no viewport
+function AnimatedCounter({
+  to,
+  suffix,
+  colorClass,
+}: {
+  to: number;
+  suffix: string;
+  colorClass: string;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const motionValue = useMotionValue(0);
+  const rounded = useTransform(motionValue, (v) => Math.round(v));
+  const inView = useInView(ref, { once: true, margin: '-60px' });
+
+  React.useEffect(() => {
+    if (!inView) return;
+    const controls = animate(motionValue, to, { duration: 1.8, ease: 'easeOut' });
+    return controls.stop;
+  }, [inView, motionValue, to]);
+
+  return (
+    <span ref={ref} className={`text-5xl lg:text-6xl font-bold font-heading ${colorClass}`}>
+      <motion.span>{rounded}</motion.span>
+      {suffix}
+    </span>
+  );
+}
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.18 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+};
+
 const ResultsSection = () => (
   <Section variant="dark">
     <SectionHeader title="Resultados que nossos clientes alcançaram" />
 
-    {/* Metrics */}
-    <div className="grid md:grid-cols-3 gap-8 mb-16">
+    {/* Metrics com counters animados */}
+    <motion.div
+      className="grid md:grid-cols-3 gap-8 mb-16"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-80px' }}
+    >
       {metrics.map((metric, index) => (
-        <div
-          key={index}
-          className="text-center animate-fade-in-up"
-          style={{ animationDelay: `${index * 0.2}s` }}
-        >
-          <div className={`text-5xl lg:text-6xl font-bold font-heading mb-4 ${metric.colorClass}`}>
-            {metric.number}
+        <motion.div key={index} className="text-center" variants={itemVariants}>
+          <div className="mb-4">
+            <AnimatedCounter to={metric.raw} suffix={metric.suffix} colorClass={metric.colorClass} />
           </div>
           <p className="text-white/80 font-body text-lg">{metric.description}</p>
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
 
     {/* Testimonials */}
-    <div className="grid lg:grid-cols-2 gap-8">
+    <motion.div
+      className="grid lg:grid-cols-2 gap-8"
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
+    >
       {testimonials.map((t, index) => (
-        <div
+        <motion.div
           key={index}
-          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 animate-fade-in-up"
-          style={{ animationDelay: `${index * 0.3}s` }}
+          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-colors duration-300"
+          variants={itemVariants}
+          whileHover={{ scale: 1.015, transition: { duration: 0.2 } }}
         >
           <div className="flex items-center gap-4 mb-6">
             <div className="w-12 h-12 bg-gradient-brand rounded-lg flex items-center justify-center text-white font-bold font-heading">
@@ -66,9 +115,9 @@ const ResultsSection = () => (
           </blockquote>
 
           <div className="text-brand-cyan font-medium font-body">— {t.author}</div>
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   </Section>
 );
 

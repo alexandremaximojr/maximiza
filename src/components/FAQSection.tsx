@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { SectionHeader } from '../design-system';
 
 const faqs = [
@@ -35,6 +36,16 @@ const faqs = [
   },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
+};
+
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
@@ -43,33 +54,55 @@ const FAQSection = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader title="Perguntas Frequentes" />
 
-        <div className="space-y-4">
+        <motion.div
+          className="space-y-4"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+        >
           {faqs.map((faq, index) => (
-            <div
+            <motion.div
               key={index}
-              className="bg-brand-off-white rounded-2xl border border-gray-100 overflow-hidden animate-fade-in-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="bg-brand-off-white rounded-2xl border border-gray-100 overflow-hidden"
+              variants={itemVariants}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-full px-6 py-6 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
+                aria-expanded={openIndex === index}
               >
                 <h3 className="text-lg font-semibold font-heading text-brand-navy-corp pr-4">
                   {faq.question}
                 </h3>
-                {openIndex === index ? (
-                  <ChevronUp className="w-5 h-5 text-brand-primary flex-shrink-0" />
-                ) : (
-                  <ChevronDown className="w-5 h-5 text-brand-primary flex-shrink-0" />
-                )}
+                <motion.div
+                  animate={{ rotate: openIndex === index ? 180 : 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="flex-shrink-0"
+                >
+                  <ChevronDown className="w-5 h-5 text-brand-primary" />
+                </motion.div>
               </button>
 
-              <div className={`faq-answer ${openIndex === index ? 'open' : ''} px-6 pb-6`}>
-                <p className="text-brand-gray font-body leading-relaxed">{faq.answer}</p>
-              </div>
-            </div>
+              {/* Altura real — sem max-height estimado */}
+              <AnimatePresence initial={false}>
+                {openIndex === index && (
+                  <motion.div
+                    key="answer"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1, transition: { duration: 0.3, ease: 'easeOut' } }}
+                    exit={{ height: 0, opacity: 0, transition: { duration: 0.22, ease: 'easeIn' } }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div className="px-6 pb-6">
+                      <p className="text-brand-gray font-body leading-relaxed">{faq.answer}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

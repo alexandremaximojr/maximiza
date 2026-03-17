@@ -1,5 +1,6 @@
 import React from 'react';
 import { RefreshCw, Target, Brain, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { SectionHeader, Badge } from '../design-system';
 
 const differentials = [
@@ -29,6 +30,16 @@ const differentials = [
   },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.14 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -24 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.45, ease: 'easeOut' } },
+};
+
 const MethodologySection = () => (
   <section className="bg-white py-20 lg:py-24">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,12 +48,19 @@ const MethodologySection = () => (
         title="O que nos torna únicos no mercado"
       />
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <motion.div
+        className="grid md:grid-cols-2 gap-8"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-80px' }}
+      >
         {differentials.map((d, index) => (
-          <div
+          <motion.div
             key={index}
-            className="bg-brand-off-white rounded-2xl p-8 hover:shadow-card-hover transition-all duration-300 hover:-translate-y-2 animate-fade-in-up"
-            style={{ animationDelay: `${index * 0.2}s` }}
+            className="bg-brand-off-white rounded-2xl p-8 hover:shadow-card-hover transition-shadow duration-300 hover:-translate-y-2"
+            variants={itemVariants}
+            whileHover={{ y: -8, transition: { duration: 0.2 } }}
           >
             <div className="flex items-start gap-6">
               <div
@@ -59,9 +77,9 @@ const MethodologySection = () => (
                 <p className="text-brand-gray font-body leading-relaxed">{d.description}</p>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   </section>
 );

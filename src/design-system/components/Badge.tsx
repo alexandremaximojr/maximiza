@@ -13,7 +13,7 @@ const variantClasses: Record<BadgeVariant, string> = {
   primary: 'bg-brand-primary/10 text-brand-primary',
   success: 'bg-brand-green/15 text-brand-green',
   cyan: 'bg-brand-cyan/15 text-brand-cyan',
-  warning: 'bg-yellow-400/15 text-yellow-300',
+  warning: 'bg-semantic-warning-100 text-semantic-warning-600',
   neutral: 'bg-white/10 text-white/70',
 };
 

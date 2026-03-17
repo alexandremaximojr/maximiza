@@ -21,6 +21,20 @@ export { FormGroup } from './components/FormGroup';
 export { Avatar } from './components/Avatar';
 export type { AvatarSize, AvatarVariant } from './components/Avatar';
 
+// New components
+export { Dialog } from './components/Dialog';
+export { Alert } from './components/Alert';
+export type { AlertVariant } from './components/Alert';
+export { Tabs } from './components/Tabs';
+export { Textarea } from './components/Textarea';
+export type { TextareaVariant, TextareaProps } from './components/Textarea';
+export { Skeleton, SkeletonCard } from './components/Skeleton';
+export { Select } from './components/Select';
+export type { SelectOption, SelectProps } from './components/Select';
+
+// Hooks
+export { useScrollReveal } from './hooks/useScrollReveal';
+
 // Tokens & utils
 export * from './tokens';
 export { cn } from './utils';

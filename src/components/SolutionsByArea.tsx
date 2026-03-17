@@ -1,5 +1,6 @@
 import React from 'react';
 import { TrendingUp, Headphones, Settings, DollarSign, Target, Users, BarChart } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Section, SectionHeader } from '../design-system';
 
 const solutions = [
@@ -82,6 +83,16 @@ const solutions = [
   },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24, scale: 0.97 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: 'easeOut' } },
+};
+
 const SolutionsByArea = () => {
   const handleAreaCTA = (area: string) => {
     const message = encodeURIComponent(`Olá! Tenho interesse nas soluções para ${area}.`);
@@ -92,12 +103,19 @@ const SolutionsByArea = () => {
     <Section id="solucoes" variant="light">
       <SectionHeader title="Soluções específicas para cada área da sua empresa" />
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <motion.div
+        className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-60px' }}
+      >
         {solutions.map((solution, index) => (
-          <div
+          <motion.div
             key={index}
-            className="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-2 animate-fade-in-up"
-            style={{ animationDelay: `${index * 0.1}s` }}
+            className="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-shadow duration-300"
+            variants={cardVariants}
+            whileHover={{ y: -6, transition: { duration: 0.2 } }}
           >
             <div className="text-center mb-4">
               <div
@@ -131,9 +149,9 @@ const SolutionsByArea = () => {
             >
               Ver soluções
             </button>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </Section>
   );
 };

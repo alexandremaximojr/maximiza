@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, Brain } from 'lucide-react';
 import { Button } from '../design-system';
 
@@ -13,12 +13,29 @@ const menuItems = [
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
+  // IntersectionObserver é mais eficiente que scroll listener — dispara apenas na mudança de estado
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsScrolled(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, []);
+
+  // Fechar menu mobile com Escape (WCAG 2.1)
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMenuOpen(false);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isMenuOpen]);
 
   const handleCTA = () => {
     const message = encodeURIComponent('Olá! Gostaria de agendar um diagnóstico gratuito.');
@@ -26,6 +43,9 @@ const Header = () => {
   };
 
   return (
+    <>
+      {/* Sentinel invisível — o IntersectionObserver detecta quando sai do viewport */}
+      <div ref={sentinelRef} className="absolute top-0 left-0 h-1 w-full pointer-events-none" aria-hidden="true" />
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? 'bg-brand-navy/95 backdrop-blur-sm shadow-lg' : 'bg-transparent'
@@ -106,6 +126,7 @@ const Header = () => {
         />
       )}
     </header>
+    </>
   );
 };
 

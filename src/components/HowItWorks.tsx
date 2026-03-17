@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search, FileText, Cog, TrendingUp } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { SectionHeader } from '../design-system';
 
 const steps = [
@@ -33,6 +34,16 @@ const steps = [
   },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.18 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 32 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+};
+
 const HowItWorks = () => (
   <section id="como-funciona" className="bg-white py-20 lg:py-24">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,13 +53,15 @@ const HowItWorks = () => (
         {/* Timeline connector */}
         <div className="hidden lg:block absolute top-24 left-0 right-0 h-0.5 bg-gradient-brand" />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <motion.div
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+        >
           {steps.map((step, index) => (
-            <div
-              key={index}
-              className="relative animate-fade-in-up"
-              style={{ animationDelay: `${index * 0.2}s` }}
-            >
+            <motion.div key={index} className="relative" variants={itemVariants}>
               <div className="relative z-10 flex items-center justify-center w-16 h-16 bg-brand-primary text-white rounded-full font-bold font-heading text-lg mx-auto mb-6">
                 {step.number}
               </div>
@@ -68,9 +81,9 @@ const HowItWorks = () => (
                   {step.time}
                 </span>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   </section>
