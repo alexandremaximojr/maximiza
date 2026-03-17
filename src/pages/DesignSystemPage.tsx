@@ -663,7 +663,7 @@ const DialogSection = () => {
             ]}
           />
           <div className="flex justify-end gap-3 pt-2">
-            <Button variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setOpen(false)}>Cancelar</Button>
             <Button variant="cta" onClick={() => setOpen(false)}>Enviar</Button>
           </div>
         </div>
