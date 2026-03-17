@@ -2,124 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --primary-blue: #5B9CFF;
-  --deep-blue: #1B365D;
-  --smart-cyan: #4FACFE;
-  --results-green: #90FF9F;
-  --corporate-navy: #0E2A56;
-  --neutral-gray: #64748B;
-  --off-white: #F8FAFC;
-  --dark-navy: #0F1848;
-  --gradient-primary: linear-gradient(135deg, #5B9CFF, #4FACFE);
-  --gradient-success: linear-gradient(135deg, #90FF9F, #4FACFE);
-  --font-primary: 'Plus Jakarta Sans', sans-serif;
-  --font-secondary: 'Inter', sans-serif;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ─── Base ──────────────────────────────────────────────────────────────────── */
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-secondary);
+  font-family: 'Inter', sans-serif;
   line-height: 1.6;
-  color: #333;
+  color: #0F1848;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-primary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
   line-height: 1.2;
 }
 
-.gradient-primary {
-  background: var(--gradient-primary);
-}
+/* ─── Brand utilities ────────────────────────────────────────────────────────── */
 
-.gradient-success {
-  background: var(--gradient-success);
-}
-
+/** Gradient text  — used as <span class="text-gradient"> */
 .text-gradient {
-  background: var(--gradient-primary);
+  background: linear-gradient(135deg, #5B9CFF, #4FACFE);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
 
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-.animate-pulse-gentle {
-  animation: pulse 2s infinite;
-}
-
-.backdrop-blur-sm {
-  backdrop-filter: blur(4px);
-}
-
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #F8FAFC;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: var(--primary-blue);
+  background: #5B9CFF;
   border-radius: 4px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--deep-blue);
+  background: #1B365D;
 }
 
-/* Mobile menu styles */
+/* ─── Mobile menu slide-in ──────────────────────────────────────────────────── */
+
 .mobile-menu {
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
 }
-
 .mobile-menu.open {
   transform: translateX(0);
 }
 
-/* FAQ accordion styles */
-.faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
+/* ─── Accessibility ─────────────────────────────────────────────────────────── */
+
+/** Visible focus ring using brand-primary for keyboard navigation */
+:focus-visible {
+  outline: 2px solid #5B9CFF;
+  outline-offset: 2px;
 }
 
-.faq-answer.open {
-  max-height: 200px;
+/** Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
