@@ -13,6 +13,14 @@ export type { SectionVariant } from './components/Section';
 
 export { Heading, Text, GradientText } from './components/Typography';
 
+export { Input } from './components/Input';
+export type { InputVariant, InputProps } from './components/Input';
+
+export { FormGroup } from './components/FormGroup';
+
+export { Avatar } from './components/Avatar';
+export type { AvatarSize, AvatarVariant } from './components/Avatar';
+
 // Tokens & utils
 export * from './tokens';
 export { cn } from './utils';

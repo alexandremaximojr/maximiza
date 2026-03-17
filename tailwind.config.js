@@ -14,6 +14,33 @@ export default {
           gray: '#64748B',
           'off-white': '#F8FAFC',
         },
+        // Semantic colors for form validation and status feedback
+        semantic: {
+          success: {
+            50:  '#F0FFF4',
+            100: '#C6F6D5',
+            500: '#38A169',
+            600: '#2F855A',
+          },
+          warning: {
+            50:  '#FFFBEB',
+            100: '#FEF3C7',
+            500: '#D97706',
+            600: '#B45309',
+          },
+          error: {
+            50:  '#FFF5F5',
+            100: '#FED7D7',
+            500: '#E53E3E',
+            600: '#C53030',
+          },
+          info: {
+            50:  '#EBF8FF',
+            100: '#BEE3F8',
+            500: '#3182CE',
+            600: '#2B6CB0',
+          },
+        },
       },
       fontFamily: {
         heading: ['"Plus Jakarta Sans"', 'sans-serif'],
