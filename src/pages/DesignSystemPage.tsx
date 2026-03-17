@@ -9,6 +9,13 @@ import {
   Input,
   FormGroup,
   Avatar,
+  Alert,
+  Tabs,
+  Textarea,
+  Skeleton,
+  SkeletonCard,
+  Select,
+  Dialog,
 } from '../design-system';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -461,6 +468,210 @@ const AnimationsSection = () => (
   </Section>
 );
 
+// ─── Alert Section ────────────────────────────────────────────────────────────
+
+const AlertSection = () => {
+  const [dismissed, setDismissed] = useState<string | null>(null);
+  const variants: Array<{ v: 'success' | 'warning' | 'error' | 'info'; title: string; msg: string }> = [
+    { v: 'success', title: 'Sucesso!',   msg: 'Diagnóstico agendado com sucesso. Entraremos em contato em breve.' },
+    { v: 'warning', title: 'Atenção',    msg: 'Sua sessão expirará em 5 minutos. Salve o progresso antes disso.' },
+    { v: 'error',   title: 'Erro',       msg: 'Não foi possível enviar o formulário. Verifique os campos obrigatórios.' },
+    { v: 'info',    title: 'Informação', msg: 'Uma nova versão do relatório está disponível para download.' },
+  ];
+
+  return (
+    <Section id="alerts" title="Alertas" subtitle="Mensagens de feedback contextual com variantes semânticas.">
+      <div className="space-y-3 max-w-xl">
+        {variants.map(({ v, title, msg }) =>
+          dismissed === v ? (
+            <button
+              key={v}
+              onClick={() => setDismissed(null)}
+              className="text-xs text-brand-gray hover:text-brand-primary transition-colors"
+            >
+              Restaurar alerta <CodeTag>{v}</CodeTag>
+            </button>
+          ) : (
+            <Alert key={v} variant={v} title={title} onDismiss={() => setDismissed(v)}>
+              {msg}
+            </Alert>
+          )
+        )}
+      </div>
+    </Section>
+  );
+};
+
+// ─── Tabs Section ─────────────────────────────────────────────────────────────
+
+const TabsSection = () => (
+  <Section id="tabs" title="Tabs" subtitle="Navegação por abas com indicador animado via Framer Motion.">
+    <div className="max-w-lg">
+      <Tabs
+        tabs={[
+          {
+            id: 'overview',
+            label: 'Visão Geral',
+            content: (
+              <Card variant="white" className="!p-5">
+                <Text size="sm" className="text-brand-navy">
+                  Painel consolidado com métricas de IA, automações ativas e relatórios de ROI em tempo real.
+                </Text>
+              </Card>
+            ),
+          },
+          {
+            id: 'analytics',
+            label: 'Analytics',
+            content: (
+              <Card variant="white" className="!p-5">
+                <Text size="sm" className="text-brand-navy">
+                  Análise profunda de conversões, churn, LTV e performance dos agentes de IA por canal.
+                </Text>
+              </Card>
+            ),
+          },
+          {
+            id: 'settings',
+            label: 'Config',
+            content: (
+              <Card variant="white" className="!p-5">
+                <Text size="sm" className="text-brand-navy">
+                  Personalize integrações, webhooks, notificações e permissões de usuário.
+                </Text>
+              </Card>
+            ),
+          },
+        ]}
+      />
+    </div>
+  </Section>
+);
+
+// ─── Select Section ───────────────────────────────────────────────────────────
+
+const SelectSection = () => (
+  <Section id="selects" title="Select" subtitle="Campo de seleção acessível com estados de validação.">
+    <div className="grid sm:grid-cols-2 gap-6 max-w-xl">
+      <Select
+        label="Setor da empresa"
+        placeholder="Selecione um setor..."
+        options={[
+          { value: 'tech',    label: 'Tecnologia' },
+          { value: 'finance', label: 'Financeiro' },
+          { value: 'health',  label: 'Saúde' },
+          { value: 'retail',  label: 'Varejo' },
+        ]}
+        hint="Usamos isso para personalizar sua proposta."
+      />
+      <Select
+        label="Tamanho da equipe"
+        placeholder="Selecione..."
+        options={[
+          { value: '1-10',    label: '1–10 pessoas' },
+          { value: '11-50',   label: '11–50 pessoas' },
+          { value: '51-200',  label: '51–200 pessoas' },
+          { value: '200+',    label: '200+ pessoas' },
+        ]}
+        error="Campo obrigatório"
+      />
+    </div>
+  </Section>
+);
+
+// ─── Textarea Section ─────────────────────────────────────────────────────────
+
+const TextareaSection = () => (
+  <Section id="textareas" title="Textarea" subtitle="Campo de texto multilinha com contagem de caracteres e estados.">
+    <div className="grid sm:grid-cols-2 gap-6 max-w-xl">
+      <Textarea
+        label="Descreva seu principal desafio"
+        placeholder="Ex: Processos manuais que consomem muitas horas da equipe..."
+        rows={4}
+        hint="Seja específico para recebermos uma proposta personalizada."
+        maxLength={300}
+      />
+      <Textarea
+        label="Observações adicionais"
+        placeholder="Qualquer informação relevante..."
+        rows={4}
+        error="A mensagem não pode estar vazia."
+      />
+    </div>
+  </Section>
+);
+
+// ─── Skeleton Section ─────────────────────────────────────────────────────────
+
+const SkeletonSection = () => (
+  <Section id="skeleton" title="Skeleton" subtitle="Estados de loading com animação pulse. Respeita prefers-reduced-motion.">
+    <div className="space-y-8">
+      <div>
+        <Label>Skeleton Card</Label>
+        <div className="grid sm:grid-cols-2 gap-4 max-w-xl">
+          <SkeletonCard />
+          <SkeletonCard />
+        </div>
+      </div>
+      <div>
+        <Label>Skeleton Inline</Label>
+        <div className="max-w-sm space-y-3">
+          <Skeleton className="h-8 w-2/3" />
+          <Skeleton lines={4} />
+          <Skeleton className="h-10 w-full rounded-xl" />
+        </div>
+      </div>
+    </div>
+  </Section>
+);
+
+// ─── Dialog Section ───────────────────────────────────────────────────────────
+
+const DialogSection = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Section id="dialog" title="Dialog / Modal" subtitle="Modal acessível com foco trap, Escape para fechar e animação de entrada.">
+      <div className="flex flex-wrap gap-3">
+        <Button variant="primary" onClick={() => setOpen(true)}>
+          Abrir Dialog
+        </Button>
+      </div>
+
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Agendar Diagnóstico Gratuito"
+      >
+        <p className="text-sm text-brand-gray font-body -mt-2 mb-4">
+          Preencha suas informações e nossa equipe entrará em contato em até 24h para definir o melhor horário.
+        </p>
+        <div className="space-y-4 mt-4">
+          <FormGroup label="Nome completo" required>
+            <Input placeholder="Seu nome" />
+          </FormGroup>
+          <FormGroup label="E-mail corporativo" required>
+            <Input type="email" placeholder="voce@empresa.com" />
+          </FormGroup>
+          <Select
+            label="Setor"
+            placeholder="Selecione..."
+            options={[
+              { value: 'tech',    label: 'Tecnologia' },
+              { value: 'finance', label: 'Financeiro' },
+              { value: 'health',  label: 'Saúde' },
+            ]}
+          />
+          <div className="flex justify-end gap-3 pt-2">
+            <Button variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>
+            <Button variant="cta" onClick={() => setOpen(false)}>Enviar</Button>
+          </div>
+        </div>
+      </Dialog>
+    </Section>
+  );
+};
+
 // ─── Sidebar Nav ──────────────────────────────────────────────────────────────
 
 const navItems = [
@@ -471,6 +682,12 @@ const navItems = [
   { id: 'badges',     label: 'Badges' },
   { id: 'inputs',     label: 'Inputs' },
   { id: 'avatars',    label: 'Avatars' },
+  { id: 'alerts',     label: 'Alertas' },
+  { id: 'tabs',       label: 'Tabs' },
+  { id: 'selects',    label: 'Select' },
+  { id: 'textareas',  label: 'Textarea' },
+  { id: 'skeleton',   label: 'Skeleton' },
+  { id: 'dialog',     label: 'Dialog' },
   { id: 'shadows',    label: 'Sombras' },
   { id: 'animations', label: 'Animações' },
 ];
@@ -495,7 +712,7 @@ export const DesignSystemPage = () => {
         <div className="h-4 w-px bg-gray-200" />
         <span className="font-heading font-bold text-brand-navy text-sm">maximiza.AI</span>
         <span className="text-brand-gray text-sm font-body">/ Design System</span>
-        <Badge variant="primary" className="ml-auto text-xs !py-1 !px-3">v1.0</Badge>
+        <Badge variant="primary" className="ml-auto text-xs !py-1 !px-3">v1.1</Badge>
       </header>
 
       <div className="flex pt-14">
@@ -542,6 +759,12 @@ export const DesignSystemPage = () => {
           <BadgesSection />
           <InputsSection />
           <AvatarSection />
+          <AlertSection />
+          <TabsSection />
+          <SelectSection />
+          <TextareaSection />
+          <SkeletonSection />
+          <DialogSection />
           <ShadowsSection />
           <AnimationsSection />
         </main>
